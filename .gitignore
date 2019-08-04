@@ -14,3 +14,6 @@ project/plugins/project/
 
 # IDE Specific
 *.code-workspace
+
+# Folder Specific
+tmp/*
