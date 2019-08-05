@@ -1,4 +1,4 @@
-# Axom
+# Axon
 
 Reinforcement learning trading on GCP
 
