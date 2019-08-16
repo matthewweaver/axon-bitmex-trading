@@ -6,7 +6,11 @@ from google.cloud import pubsub_v1
 project_id = "axon-249519"
 topic_name = "orderbook"
 
-publisher = pubsub_v1.PublisherClient().from_service_account_file("/Users/weaverm/Documents/axon/axon-249519-cf03596b9c0d.json")
+# import os
+# dirname = os.path.dirname(__file__)
+# service_account = os.path.join(dirname, '../path/resources/axon-249519-6fec7265c5cf.json')
+
+publisher = pubsub_v1.PublisherClient().from_service_account_file("/Users/emmahowes/Documents/Matt/git/axon-249519-6fec7265c5cf.json")
 topic_path = publisher.topic_path(project_id, topic_name)
 
 # Basic use of websocket.
@@ -19,8 +23,9 @@ def run():
 
     logger.info("Instrument data: %s" % ws.get_instrument())
 
+    #"""
     # Run forever
-    while(ws.ws.sock.connected):
+    while ws.ws.sock.connected:
         logger.info("Ticker: %s" % ws.get_ticker())
         if ws.api_key:
             logger.info("Funds: %s" % ws.funds())
@@ -28,7 +33,7 @@ def run():
         logger.info("Recent Trades: %s\n\n" % ws.recent_trades())
         # sleep(10)
 
-        """Publishes multiple messages to a Pub/Sub topic."""
+        #Publishes multiple messages to a Pub/Sub topic.
         print("Publishing to cloud")
         for message in ws.market_depth():
             # Data must be a bytestring
@@ -36,6 +41,29 @@ def run():
             # When you publish a message, the client returns a future.
             print(data)
             publisher.publish(topic_path, data=data)
+    #"""
+
+"""
+    # Timer
+    import time
+    start = time.time()
+    print("Starting Timer:")
+    i = 0
+    for message in ws.market_depth():
+        i = i + 1
+        print(i)
+        if i > 999:
+            break
+        # Data must be a bytestring
+        data = str(message).encode('utf-8')
+        # When you publish a message, the client returns a future.
+        #print(data)
+        publisher.publish(topic_path, data=data)
+        #print(i)
+
+    end = time.time()
+    print(end - start)
+"""
 
 def setup_logger():
     # Prints logger info to terminal
