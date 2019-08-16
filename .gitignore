@@ -17,3 +17,5 @@ project/plugins/project/
 
 # Folder Specific
 tmp/*
+
+src/main/resources/

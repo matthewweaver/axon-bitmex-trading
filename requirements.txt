@@ -1,0 +1,2 @@
+bitmex-ws
+google-cloud-pubsub
