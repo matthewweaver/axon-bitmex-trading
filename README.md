@@ -4,7 +4,9 @@ Reinforcement learning trading on GCP
 
 ## Getting Started
 
-TODO
+Need to set GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of your service account JSON. Can keep in the src/main/resources folder as this is ignored by git.
+Can't connect over VF proxy.
+Requires Python 3.7.
 
 ### Prerequisites
 

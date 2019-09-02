@@ -14,8 +14,10 @@ project/plugins/project/
 
 # IDE Specific
 *.code-workspace
+.idea
+.DS_Store
 
 # Folder Specific
 tmp/*
 
-src/main/resources/
+bitmex/resources/*

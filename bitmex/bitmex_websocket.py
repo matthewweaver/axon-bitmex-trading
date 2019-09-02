@@ -92,6 +92,7 @@ class BitMEXWebsocket:
 
     def market_depth(self):
         '''Get market depth (orderbook). Returns all levels.'''
+        print(self.data.keys())
         return self.data['orderBookL2']
 
     def open_orders(self, clOrdIDPrefix):
