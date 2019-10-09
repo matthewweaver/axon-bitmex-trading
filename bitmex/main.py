@@ -1,4 +1,4 @@
-from bitmex_websocket import BitMEXWebsocket
+from bitmex.bitmex_websocket import BitMEXWebsocket
 import logging
 import time
 from google.cloud import pubsub_v1
@@ -6,60 +6,35 @@ import os
 
 
 project_id = "axon-249519"
-topic_name = "orderbook"
 
-publisher = pubsub_v1.PublisherClient().from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-topic_path = publisher.topic_path(project_id, topic_name)
+publisher = pubsub_v1.PublisherClient() #.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
 
 # Basic use of websocket.
 def run():
     logger = setup_logger()
 
     # Instantiating the WS will make it connect. Be sure to add your api_key/api_secret.
-    ws = BitMEXWebsocket(endpoint="https://testnet.bitmex.com/api/v1", symbol="XBTUSD",
+    ws = BitMEXWebsocket(endpoint="https://www.bitmex.com/api/v1", symbol="XBTUSD",
                          api_key=None, api_secret=None)
 
     logger.info("Instrument data: %s" % ws.get_instrument())
 
-
     # Run forever
     while ws.ws.sock.connected:
-        logger.info("Ticker: %s" % ws.get_ticker())
-        if ws.api_key:
-            logger.info("Funds: %s" % ws.funds())
-        # logger.info("Market Depth: %s" % ws.market_depth())
-        logger.info("Recent Trades: %s\n\n" % ws.recent_trades())
-        # sleep(10)
+        # print(ws.data.keys())
 
-        #Publishes multiple messages to a Pub/Sub topic.
-        print("Publishing to cloud")
-        for message in ws.recent_trades():
-            # Data must be a bytestring
-            data = str(message).encode('utf-8')
-            # When you publish a message, the client returns a future.
-            print(data)
-            # publisher.publish(topic_path, data=data)
+        # Ticker
+        logger.info("Ticker: %s" % str(ws.get_ticker()).replace("'",'"'))
+        publisher.publish(publisher.topic_path(project_id, "ticker"), data=str(ws.get_ticker()).replace("'",'"').encode('utf-8'))
 
+        # Trades
+        # logger.info("Recent Trades: %s\n\n" % str(ws.recent_trades()).replace("'",'"'))
+        # publisher.publish(publisher.topic_path(project_id, "recentTrades"), data=str(ws.recent_trades()).replace("'",'"').encode('utf-8'))
 
-  # # Timer
-  #   import time
-  #   start = time.time()
-  #   print("Starting Timer:")
-  #   i = 0
-  #   for message in ws.market_depth():
-  #       i = i + 1
-  #       print(i)
-  #       if i > 999:
-  #           break
-  #       # Data must be a bytestring
-  #       data = str(message).encode('utf-8')
-  #       # When you publish a message, the client returns a future.
-  #       #print(data)
-  #       #publisher.publish(topic_path, data=data)
-  #       #print(i)
-  #
-  #   end = time.time()
-  #   print(end - start)
+        # Depth
+        # if "orderBookL2" in ws.data:
+        #     logger.info("Market Depth: %s" % str(ws.market_depth()).replace("'",'"'))
+        #     publisher.publish(publisher.topic_path(project_id, "orderBookL2"), data=str(ws.market_depth()).replace("'", '"').encode('utf-8'))
 
 
 def setup_logger():

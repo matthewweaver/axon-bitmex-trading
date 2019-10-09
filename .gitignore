@@ -1,21 +1,10 @@
-# Scala Specific
-
-*.class
-*.log
-.cache/
-.history/
-.lib/
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-
 # IDE Specific
 *.code-workspace
 .idea
 .DS_Store
+
+# Python Specific
+*.pyc
 
 # Folder Specific
 tmp/*
