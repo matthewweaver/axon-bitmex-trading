@@ -1,8 +1,6 @@
-from bitmex.bitmex_websocket import BitMEXWebsocket
+from bitmex_websocket import BitMEXWebsocket
 import logging
-import time
 from google.cloud import pubsub_v1
-import os
 
 
 project_id = "axon-249519"
